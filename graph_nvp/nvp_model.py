@@ -37,7 +37,6 @@ class GraphNvpModel(nn.Module):
             self.masks['channel'] = self._create_masks('channel')
         self.num_bonds = self.num_relations
         self.num_atoms = self.num_nodes
-        assert self.num_bonds+1 == self.num_features
         self.adj_size = self.num_atoms * self.num_atoms * self.num_relations
         self.x_size = self.num_atoms * self.num_features
         #self.prior_ln_var = torch.tensor([0.7],device=args.device, dtype=torch.float32)

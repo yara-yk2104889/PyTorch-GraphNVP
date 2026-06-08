@@ -1,7 +1,7 @@
 import numpy as np
 import json
 
-def one_hot(data, out_size=9, num_max_id=5):
+def one_hot(data, out_size=9, num_max_id=5):        #replace this with drs method (+1 and -1)
     assert data.shape[0] == out_size
     b = np.zeros((out_size, num_max_id))
     # data = data[data > 0]
@@ -11,7 +11,7 @@ def one_hot(data, out_size=9, num_max_id=5):
     # print('[DEBUG] data', data, 'b', b)
     return b
 
-def transform_fn(data):
+def transform_fn(data):                             #implement position to tensor of the bound
     node, adj, label = data
     # convert to one-hot vector
     node = one_hot(node).astype(np.float32)

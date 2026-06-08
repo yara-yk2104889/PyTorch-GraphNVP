@@ -6,7 +6,7 @@ def get_parser():
     # data I/O
     parser.add_argument('--data_dir', type=str, default='./data', help='Location for the dataset')
     parser.add_argument('--data_path', type=str, default='./data/qm9', help='path for loading data and dataconfig')
-    parser.add_argument('--data_name', type=str, default='qm9', choices=['qm9', 'zinc250k'], help='dataset name')
+    parser.add_argument('--data_name', type=str, default='qm9', choices=['qm9', 'zinc250k', 'moses'], help='dataset name')
     parser.add_argument('--data_file', type=str, default='qm9_relgcn_kekulized_ggnp.npz', help='Name of the dataset')
     parser.add_argument('--save_dir', type=str, default='./results',
                         help='Location for parameter checkpoints and samples')

@@ -3,7 +3,10 @@ import chainer.functions as chainerF
 import numpy as np
 from chainer.backends import cuda
 from rdkit import Chem
-from rdkit.Chem import Draw
+try:
+    from rdkit.Chem import Draw
+except ImportError:
+    Draw = None
 import torch
 
 atom_decoder_m = {0: 6, 1: 7, 2: 8, 3: 9, 4: 15, 5: 16, 6: 17, 7: 35, 8: 53}
@@ -143,4 +146,6 @@ def check_novelty(gen_smiles, train_smiles):
     return novel_ratio
 
 def save_mol_png(mol, filepath, size=(600, 600)):
+    if Draw is None:
+        return
     Draw.MolToFile(mol, filepath, size=size)

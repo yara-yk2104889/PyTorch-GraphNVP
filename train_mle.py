@@ -62,6 +62,13 @@ def main():
         mlp_channels = [1024, 512]
         gnn_channels = {'gcn': [16, 128], 'hidden': [64, 256]}
         valid_idx = transform_zinc250k.get_val_ids()
+    elif args.data_name == 'moses':
+        from data import transform_moses
+        transform_fn = transform_moses.transform_fn
+        args.atomic_num_list = [6, 7, 8, 9, 16, 17, 35, 0]
+        mlp_channels = [1024, 512]
+        gnn_channels = {'gcn': [16, 128], 'hidden': [64, 256]}
+        valid_idx = transform_moses.get_val_ids()
 
     dataset = NumpyTupleDataset.load(joinpath(args.data_dir, args.data_file))
     dataset = TransformDataset(dataset, transform_fn)
@@ -199,6 +206,7 @@ def main():
             pbar.close()
 
             print("Saving GraphNVP model trained with maximum liklihood")
+            os.makedirs(args.model_save_dir, exist_ok=True)
             model_path = joinpath(args.model_save_dir, 'epoch{}-mle.ckpt'.format(epoch))
             torch.save(model.state_dict(), model_path)
             print('Saved model checkpoints into {}...'.format(args.model_save_dir))

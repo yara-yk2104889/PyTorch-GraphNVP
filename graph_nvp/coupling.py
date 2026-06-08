@@ -58,7 +58,7 @@ class AffineAdjCoupling(Coupling):
         self.ch_list = ch_list
         self.adj_size = num_nodes * num_nodes * num_relations
         self.out_size = num_nodes * num_relations
-        self.in_size = self.adj_size - self.out_size
+        self.in_size = self.adj_size - num_masked_cols * self.out_size
 
         self.mlp = MLP(ch_list, in_size=self.in_size)
         self.lin = nn.Linear(ch_list[-1], 2 * self.out_size)
@@ -163,7 +163,7 @@ class AdditiveAdjCoupling(Coupling):
         self.num_masked_cols = num_masked_cols
         self.adj_size = num_nodes * num_nodes * num_relations
         self.out_size = num_nodes * num_relations
-        self.in_size = self.adj_size - self.out_size
+        self.in_size = self.adj_size - num_masked_cols * self.out_size
         self.mlp = MLP(ch_list, in_size=self.in_size)
         self.lin = nn.Linear(ch_list[-1], out_features=self.out_size)
         self.batch_norm = nn.BatchNorm1d(self.in_size)
@@ -223,7 +223,7 @@ class AdditiveNodeFeatureCoupling(Coupling):
         t = t.view(batch_size, 1, self.out_size)
         t = t.expand(batch_size, int(self.num_nodes/self.num_masked_cols), self.out_size)
         if self.num_masked_cols > 1:
-             t = t.view(batch_size, self.num_nodes, self.num_features)
+             t = t.reshape(batch_size, self.num_nodes, self.num_features)
         x = x + t * self.inversed_mask
         return x, torch.zeros(1, device=args.device)
 
@@ -234,7 +234,7 @@ class AdditiveNodeFeatureCoupling(Coupling):
         t = t.view(batch_size, 1, self.out_size)
         t = t.expand(batch_size, int(self.num_nodes/self.num_masked_cols), self.out_size)
         if self.num_masked_cols > 1:
-             t = t.view(batch_size, self.num_nodes, self.num_features)
+             t = t.reshape(batch_size, self.num_nodes, self.num_features)
         y = y - t * self.inversed_mask
         return y, None
 
